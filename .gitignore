@@ -1,0 +1,41 @@
+# Node.js / General
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp
+
+# Test coverage
+coverage/
+*.lcov
+
+# Backend (NestJS)
+backend/dist/
+backend/.eslintcache
+
+# Frontend (Next.js)
+frontend/.next/
+frontend/.turbo/
+frontend/out/
+frontend/.eslintcache
+
+# API (TypeSpec / OpenAPI outputs)
+# Keep openapi.yaml, ignore heavy build artifacts
+api/tsp-output/**/dist/
+
+# Misc
+.vercel/
+
