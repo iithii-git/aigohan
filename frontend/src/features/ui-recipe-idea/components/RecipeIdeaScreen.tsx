@@ -2,14 +2,15 @@
  * RecipeIdeaScreen.tsx - レシピアイデア統合画面
  * 
  * 【目的】
- * 分割されたコンポーネントを統合して、レシピアイデア生成の
- * 完全なユーザー体験を提供します。食材入力、画像認識、味の設定、
- * レシピ生成、結果表示までの全フローを管理します。
+ * レシピアイデア生成機能の完全なユーザー体験を提供します。
+ * 食材入力、画像認識、味の設定、レシピ生成、結果表示までの
+ * 全フローをページコンテンツとして管理します。
  * 
  * 【設計思想】
+ * - Next.js App Routerに最適化: レイアウト責任をapp/layout.tsxに移譲
+ * - 純粋なページコンテンツ: ヘッダー・フッターを含まない
  * - 単一責任の原則: 各機能コンポーネントは独立している
- * - 状態管理の集約: このコンポーネントで全体の状態を管理
- * - UI/UXの統一: レイアウトとフローを一貫して提供
+ * - 状態管理の集約: レシピ生成フローの状態のみを管理
  * 
  * 【主要機能】
  * - 食材管理（手動入力・画像認識）
@@ -21,7 +22,6 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import Layout from '@/components/layout/Layout';
 
 // 機能コンポーネント（相対インポートで循環参照回避）
 import IngredientInputSection, { type IngredientItem } from './IngredientInputSection';
@@ -67,11 +67,11 @@ interface AppState {
 /**
  * レシピアイデア統合画面
  * 
- * コンポーネント分割による利点：
- * - 各機能の独立性とテスト容易性
- * - 再利用性の向上
- * - コードの保守性向上
- * - 状態管理の明確化
+ * Next.js App Routerベストプラクティスに従った設計：
+ * - app/layout.tsxでアプリ全体構造を管理
+ * - ページコンポーネントは純粋にコンテンツに集中
+ * - 各機能コンポーネントの独立性とテスト容易性を維持
+ * - レシピ生成フローの状態管理を集約
  */
 export default function RecipeIdeaScreen() {
   
@@ -253,6 +253,7 @@ export default function RecipeIdeaScreen() {
     }
   }, []);
   
+  
   // ===================================================================
   // エフェクト
   // ===================================================================
@@ -275,12 +276,7 @@ export default function RecipeIdeaScreen() {
   // ===================================================================
   
   return (
-    <Layout 
-      headerTitle="AI Gohan" 
-      headerSubtitle="食材からレシピを作ろう"
-      maxWidth="4xl"
-    >
-      <div className="space-y-8">
+    <div className="space-y-8">
         
         {/* ===== エラー表示 ===== */}
         {appState.error && (
@@ -340,19 +336,16 @@ export default function RecipeIdeaScreen() {
           />
         )}
         
+        {/* ===== 画像アップロードモーダル ===== */}
+        <ImageUploadModal
+          isOpen={isImageModalOpen}
+          onClose={() => setIsImageModalOpen(false)}
+          onImagesSelected={handleImagesSelected}
+          isUploading={imageUpload.isLoading}
+          maxFiles={5}
+          maxSizeInMB={10}
+        />
       </div>
-      
-      {/* ===== 画像アップロードモーダル ===== */}
-      <ImageUploadModal
-        isOpen={isImageModalOpen}
-        onClose={() => setIsImageModalOpen(false)}
-        onImagesSelected={handleImagesSelected}
-        isUploading={imageUpload.isLoading}
-        maxFiles={5}
-        maxSizeInMB={10}
-      />
-      
-    </Layout>
   );
 }
 
