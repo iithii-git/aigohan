@@ -41,6 +41,7 @@ export interface ErrorInfo {
 export interface RecipeGenerationRequest {
   ingredients: string[];
   images?: File[];
+  preferences?: string; // 味の好みやスタイル指定（新UI対応）
 }
 
 export interface RecipeGenerationResponse extends ApiResponse<Recipe> {}
