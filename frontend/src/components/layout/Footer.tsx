@@ -1,15 +1,16 @@
 /**
- * BottomNavigation.tsx - ボトムナビゲーションコンポーネント
+ * Footer.tsx - アプリケーションフッター（ボトムナビゲーション）
  * 
  * 【目的】
- * モバイルファーストデザインでのメインナビゲーションです。
- * 画面下部に固定表示され、主要な画面への遷移を提供します。
+ * アプリケーションのメインナビゲーションをフッターとして提供します。
+ * 画面下部に固定表示され、モバイルファーストなタブ形式で
+ * 主要な画面への遷移を可能にします。
  * 
  * 【機能】
  * - 5つの主要画面への遷移
  * - 現在のページのハイライト表示
  * - アクセシビリティ対応
- * - レスポンシブデザイン
+ * - Safe Area対応のレスポンシブデザイン
  */
 
 'use client';
@@ -44,9 +45,9 @@ interface NavigationItem {
 }
 
 /**
- * BottomNavigationコンポーネントのプロパティ
+ * Footerコンポーネントのプロパティ
  */
-export interface BottomNavigationProps {
+export interface FooterProps {
   /** 現在アクティブなタブ */
   activeTab?: NavigationTab;
   /** タブ変更時のコールバック */
@@ -96,16 +97,16 @@ const navigationItems: NavigationItem[] = [
 // ===================================================================
 
 /**
- * ボトムナビゲーション
+ * アプリケーションフッター（タブナビゲーション）
  * 
- * モバイルアプリのようなタブナビゲーションを提供します。
+ * レイアウトのフッター部分として、モバイルファーストなタブナビゲーションを提供します。
  * 中央のアイデア画面が強調表示され、メイン機能であることを示します。
  */
-export default function BottomNavigation({
+export default function Footer({
   activeTab = 'idea',
   onTabChange,
   className,
-}: BottomNavigationProps) {
+}: FooterProps) {
   
   /**
    * タブクリック処理
@@ -115,12 +116,16 @@ export default function BottomNavigation({
   };
   
   return (
-    <nav className={`
-      fixed bottom-0 left-0 right-0 z-50
-      bg-white/95 backdrop-blur-sm border-t border-gray-200
-      safe-area-padding-bottom
-      ${className}
-    `}>
+    <footer 
+      className={`
+        fixed bottom-0 left-0 right-0 z-50
+        bg-white/95 backdrop-blur-sm border-t border-gray-200
+        safe-area-padding-bottom
+        ${className}
+      `}
+      role="contentinfo"
+    >
+      <nav className="h-full">
       <div className="max-w-screen-sm mx-auto">
         <div className="flex items-center justify-around px-2 py-2">
           
@@ -183,7 +188,8 @@ export default function BottomNavigation({
       
       {/* Safe areaサポート用のパディング */}
       <div className="h-safe-area-inset-bottom bg-white/95"></div>
-    </nav>
+      </nav>
+    </footer>
   );
 }
 

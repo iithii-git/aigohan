@@ -22,17 +22,32 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 
 // 機能コンポーネント（相対インポートで循環参照回避）
 import IngredientInputSection, { type IngredientItem } from './IngredientInputSection';
-import ImageUploadModal from './ImageUploadModal';
 import TasteProfileSelector, { type TasteProfile } from './TasteProfileSelector';
 import GenerateRecipeButton from './GenerateRecipeButton';
 
-import { 
-  RecipeDisplay,
-  type RecipeDisplayProps
-} from '@/features/ui-recipe-view';
+// 動的インポート（SSR回避）
+const ImageUploadModal = dynamic(() => import('./ImageUploadModal'), {
+  ssr: false,
+  loading: () => null
+});
+
+const RecipeDisplay = dynamic(
+  () => import('@/features/ui-recipe-view').then(mod => ({ default: mod.RecipeDisplay })),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="bg-white rounded-3xl shadow-xl p-8 animate-pulse">
+        <div className="h-8 bg-gray-200 rounded mb-4"></div>
+        <div className="h-4 bg-gray-200 rounded mb-2"></div>
+        <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+      </div>
+    )
+  }
+);
 
 // フック
 import { 
@@ -91,13 +106,35 @@ export default function RecipeIdeaScreen() {
   
   /** 味の好み設定 */
   const [tasteProfile, setTasteProfile] = useState<TasteProfile>({
-    style: 'ふつう',
-    intensity: 3,
-    duration: '30分以内',
+    style: '普通',
+    intensity: '普通',
+    duration: '早く',
   });
   
   /** 画像アップロードモーダル表示状態 */
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  /** 画像アップロード初期モード */
+  const [imageModalInitialMode, setImageModalInitialMode] = useState<'gallery' | 'camera' | undefined>(undefined);
+  
+  /** モーダル開閉処理 */
+  const handleImageModalOpen = useCallback(() => {
+    setImageModalInitialMode(undefined);
+    setIsImageModalOpen(true);
+  }, []);
+
+  const handleOpenCamera = useCallback(() => {
+    setImageModalInitialMode('camera');
+    setIsImageModalOpen(true);
+  }, []);
+
+  const handleOpenGallery = useCallback(() => {
+    setImageModalInitialMode('gallery');
+    setIsImageModalOpen(true);
+  }, []);
+  
+  const handleImageModalClose = useCallback(() => {
+    setIsImageModalOpen(false);
+  }, []);
   
   // ===================================================================
   // フック
@@ -229,9 +266,9 @@ export default function RecipeIdeaScreen() {
     });
     setIngredients([]);
     setTasteProfile({
-      style: 'ふつう',
-      intensity: 3,
-      duration: '30分以内',
+      style: '普通',
+      intensity: '普通',
+      duration: '早く',
     });
   }, []);
   
@@ -292,7 +329,9 @@ export default function RecipeIdeaScreen() {
             <IngredientInputSection
               ingredients={ingredients}
               onIngredientsChange={setIngredients}
-              onImageUploadClick={() => setIsImageModalOpen(true)}
+              onImageUploadClick={handleImageModalOpen}
+              onOpenGallery={handleOpenGallery}
+              onOpenCamera={handleOpenCamera}
               maxIngredients={50}
               disabled={recipeGeneration.isPending}
             />
@@ -339,11 +378,12 @@ export default function RecipeIdeaScreen() {
         {/* ===== 画像アップロードモーダル ===== */}
         <ImageUploadModal
           isOpen={isImageModalOpen}
-          onClose={() => setIsImageModalOpen(false)}
+          onClose={handleImageModalClose}
           onImagesSelected={handleImagesSelected}
           isUploading={imageUpload.isLoading}
           maxFiles={5}
           maxSizeInMB={10}
+          initialMode={imageModalInitialMode}
         />
       </div>
   );

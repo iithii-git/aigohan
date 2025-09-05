@@ -144,6 +144,11 @@ export default function Modal({
   // レンダリング
   // ===================================================================
   
+  // サーバーサイドレンダリング時はポータルを作成しない
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  
   return createPortal(
     <div
       className={clsx(

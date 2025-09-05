@@ -2,14 +2,14 @@
  * TasteProfileSelector.tsx - 味の好み設定コンポーネント
  * 
  * 【目的】
- * ユーザーの味の好みを設定するためのUIコンポーネントです。
- * セグメントコントロール、スライダー、ラジオボタンを組み合わせて
- * 直感的な味の設定インターフェースを提供します。
+ * ユーザーの気分や好みを設定するためのUIコンポーネントです。
+ * 統一されたセグメントコントロールで
+ * シンプルで直感的な設定インターフェースを提供します。
  * 
  * 【機能】
  * - 味のスタイル選択（セグメントコントロール）
- * - 味の濃さ設定（カスタムスライダー）
- * - 調理時間選択（ラジオボタン）
+ * - 味の濃さ設定（セグメントコントロール）
+ * - 調理時間選択（セグメントコントロール）
  * - レスポンシブデザイン
  */
 
@@ -24,19 +24,24 @@ import { useState, useCallback } from 'react';
 /**
  * 味のスタイル選択肢
  */
-export type TasteStyle = 'あっさり' | 'ふつう' | 'しっかり';
+export type TasteStyle = 'あっさり' | '普通' | 'こってり';
+
+/**
+ * 味の濃さ選択肢
+ */
+export type TasteIntensity = '薄め' | '普通' | '濃いめ';
 
 /**
  * 調理時間選択肢
  */
-export type CookingDuration = '15分以内' | '30分以内' | 'じっくり';
+export type CookingDuration = '早く' | '気にしない';
 
 /**
  * 味の好み設定の状態
  */
 export interface TasteProfile {
   style: TasteStyle;
-  intensity: number; // 1-5のスライダー値
+  intensity: TasteIntensity; // セグメントコントロール値
   duration: CookingDuration;
 }
 
@@ -86,9 +91,8 @@ export default function TasteProfileSelector({
   /**
    * 味の濃さ変更処理
    */
-  const handleIntensityChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleIntensityChange = useCallback((intensity: TasteIntensity) => {
     if (disabled) return;
-    const intensity = parseInt(event.target.value);
     onChange({ ...value, intensity });
   }, [value, onChange, disabled]);
   
@@ -105,31 +109,28 @@ export default function TasteProfileSelector({
   // ===================================================================
   
   return (
-    <div className={`bg-white rounded-3xl shadow-lg p-6 md:p-8 ${className}`}>
+    <div className={`bg-white rounded-3xl shadow-lg p-4 md:p-5 ${className}`}>
       
       {/* ===== セクションヘッダー ===== */}
-      <h2 className="text-xl font-bold text-gray-900 mb-6">
-        どんな味付けがいい？
+      <h2 className="text-xl font-bold text-gray-900 mb-3">
+        どんな気分？
       </h2>
       
-      <div className="space-y-8">
+      <div className="space-y-4">
         
         {/* ===== 味のスタイル（セグメントコントロール） ===== */}
         <div>
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            味のスタイル
-          </h3>
           <div className="flex bg-gray-100 rounded-2xl p-1">
-            {(['あっさり', 'ふつう', 'しっかり'] as TasteStyle[]).map((style) => (
+            {(['あっさり', '普通', 'こってり'] as TasteStyle[]).map((style) => (
               <button
                 key={style}
                 onClick={() => handleStyleChange(style)}
                 disabled={disabled}
                 className={`
-                  flex-1 py-3 px-4 text-sm font-medium rounded-xl transition-all duration-200
+                  flex-1 py-2 px-3 text-sm font-medium rounded-xl transition-all duration-200
                   disabled:cursor-not-allowed disabled:opacity-50
                   ${value.style === style
-                    ? 'bg-white text-orange-600 shadow-sm transform scale-105'
+                    ? 'bg-white text-orange-600 shadow-sm'
                     : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
                   }
                 `}
@@ -141,99 +142,50 @@ export default function TasteProfileSelector({
           </div>
         </div>
         
-        {/* ===== 味の濃さ（スライダー） ===== */}
+        {/* ===== 味の濃さ（セグメントコントロール） ===== */}
         <div>
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            味の濃さ
-          </h3>
-          <div className="space-y-4">
-            
-            {/* カスタムスライダー */}
-            <input
-              type="range"
-              min="1"
-              max="5"
-              value={value.intensity}
-              onChange={handleIntensityChange}
-              disabled={disabled}
-              className={`
-                w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer
-                transition-opacity duration-200
-                disabled:cursor-not-allowed disabled:opacity-50
-                [&::-webkit-slider-thumb]:appearance-none 
-                [&::-webkit-slider-thumb]:w-6 
-                [&::-webkit-slider-thumb]:h-6
-                [&::-webkit-slider-thumb]:bg-orange-500 
-                [&::-webkit-slider-thumb]:rounded-full 
-                [&::-webkit-slider-thumb]:cursor-pointer
-                [&::-webkit-slider-thumb]:shadow-lg
-                [&::-webkit-slider-thumb]:transition-transform
-                [&::-webkit-slider-thumb]:hover:scale-110
-                [&::-moz-range-thumb]:w-6 
-                [&::-moz-range-thumb]:h-6 
-                [&::-moz-range-thumb]:bg-orange-500
-                [&::-moz-range-thumb]:rounded-full 
-                [&::-moz-range-thumb]:border-none 
-                [&::-moz-range-thumb]:cursor-pointer
-              `}
-              aria-label="味の濃さを設定"
-            />
-            
-            {/* スライダーラベル */}
-            <div className="flex justify-between text-sm text-gray-600">
-              <span>薄め</span>
-              <span className="font-medium text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
-                {value.intensity}/5
-              </span>
-              <span>濃いめ</span>
-            </div>
-            
+          <div className="flex bg-gray-100 rounded-2xl p-1">
+            {(['薄め', '普通', '濃いめ'] as TasteIntensity[]).map((intensity) => (
+              <button
+                key={intensity}
+                onClick={() => handleIntensityChange(intensity)}
+                disabled={disabled}
+                className={`
+                  flex-1 py-2 px-3 text-sm font-medium rounded-xl transition-all duration-200
+                  disabled:cursor-not-allowed disabled:opacity-50
+                  ${value.intensity === intensity
+                    ? 'bg-white text-blue-600 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                  }
+                `}
+                aria-pressed={value.intensity === intensity}
+              >
+                {intensity}
+              </button>
+            ))}
           </div>
         </div>
         
-        {/* ===== 調理時間（ラジオボタン） ===== */}
+        {/* ===== 調理時間（セグメントコントロール） ===== */}
         <div>
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            調理時間
-          </h3>
-          <div className="space-y-3">
-            {(['15分以内', '30分以内', 'じっくり'] as CookingDuration[]).map((duration) => (
-              <label
+          <div className="flex bg-gray-100 rounded-2xl p-1">
+            {(['早く', '気にしない'] as CookingDuration[]).map((duration) => (
+              <button
                 key={duration}
+                onClick={() => handleDurationChange(duration)}
+                disabled={disabled}
                 className={`
-                  flex items-center space-x-3 p-3 rounded-xl cursor-pointer transition-all duration-200
-                  hover:bg-gray-50 group
-                  ${disabled ? 'cursor-not-allowed opacity-50' : ''}
-                  ${value.duration === duration ? 'bg-orange-50 border-2 border-orange-200' : 'border-2 border-transparent'}
+                  flex-1 py-2 px-3 text-sm font-medium rounded-xl transition-all duration-200
+                  disabled:cursor-not-allowed disabled:opacity-50
+                  ${value.duration === duration
+                    ? 'bg-white text-green-600 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                  }
                 `}
+                aria-pressed={value.duration === duration}
               >
-                {/* ラジオボタン */}
-                <input
-                  type="radio"
-                  name="cooking-duration"
-                  value={duration}
-                  checked={value.duration === duration}
-                  onChange={() => handleDurationChange(duration)}
-                  disabled={disabled}
-                  className="w-5 h-5 text-orange-600 focus:ring-orange-500 focus:ring-offset-2"
-                />
-                
-                {/* ラベルテキスト */}
-                <span className={`
-                  font-medium transition-colors
-                  ${value.duration === duration ? 'text-orange-700' : 'text-gray-700 group-hover:text-gray-900'}
-                `}>
-                  {duration}
-                </span>
-                
-                {/* 説明テキスト */}
-                <span className="text-xs text-gray-500 ml-auto">
-                  {duration === '15分以内' && '手軽に'}
-                  {duration === '30分以内' && '程よく'}
-                  {duration === 'じっくり' && '時間をかけて'}
-                </span>
-                
-              </label>
+                {duration}
+              </button>
             ))}
           </div>
         </div>
@@ -241,15 +193,15 @@ export default function TasteProfileSelector({
       </div>
       
       {/* ===== 設定サマリー ===== */}
-      <div className="mt-8 pt-6 border-t border-gray-100">
-        <div className="bg-orange-50 p-4 rounded-xl">
+      <div className="mt-4 pt-4 border-t border-gray-100">
+        <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-3 rounded-xl border border-orange-100">
           <h4 className="text-sm font-medium text-orange-800 mb-2">
-            📋 現在の設定
+            ✨ 今の気分
           </h4>
           <p className="text-sm text-orange-700">
             <span className="font-medium">{value.style}</span>で
-            <span className="font-medium">濃さ{value.intensity}/5</span>、
-            <span className="font-medium">{value.duration}</span>で調理
+            <span className="font-medium">{value.intensity}</span>な味付け、時間は
+            <span className="font-medium">{value.duration}</span>で作りたい気分
           </p>
         </div>
       </div>

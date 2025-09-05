@@ -19,6 +19,7 @@
 import { ReactNode, useState, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import QueryProvider from '@/lib/providers/QueryProvider';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import Header from './Header';
 import Footer, { NavigationTab } from './Footer';
 
@@ -107,26 +108,30 @@ export default function AppLayout({ children }: AppLayoutProps) {
   
   return (
     <QueryProvider>
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-yellow-50">
-        
-        {/* ヘッダー */}
-        <Header title="AI Gohan" />
-        
-        {/* メインコンテンツ */}
-        <main 
-          className="max-w-4xl mx-auto px-4 py-4 pb-24"
-          role="main"
-        >
-          {children}
-        </main>
-        
-        {/* フッター（タブナビゲーション） */}
-        <Footer
-          activeTab={activeTab}
-          onTabChange={handleTabChange}
-        />
-        
-      </div>
+      <ErrorBoundary>
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-yellow-50">
+          
+          {/* ヘッダー */}
+          <Header title="AI Gohan" />
+          
+          {/* メインコンテンツ */}
+          <main 
+            className="max-w-4xl mx-auto px-4 py-4 pb-24"
+            role="main"
+          >
+            <ErrorBoundary>
+              {children}
+            </ErrorBoundary>
+          </main>
+          
+          {/* フッター（タブナビゲーション） */}
+          <Footer
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+          />
+          
+        </div>
+      </ErrorBoundary>
     </QueryProvider>
   );
 }

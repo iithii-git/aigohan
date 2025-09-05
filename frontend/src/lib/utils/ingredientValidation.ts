@@ -225,6 +225,7 @@ export function validateMultipleIngredients(
   }
 
   // 各食材の個別バリデーション
+  // eslint-disable-next-line prefer-const -- 配列にpushするため変更可能である必要がある
   let cumulativeIngredients = [...existingIngredients];
 
   names.forEach(name => {

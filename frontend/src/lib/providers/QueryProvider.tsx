@@ -22,8 +22,8 @@ export default function QueryProvider({ children }: QueryProviderProps) {
             retry: (failureCount, error) => {
               // 4xx エラーはリトライしない
               if (error instanceof Error && 'status' in error) {
-                const status = (error as any).status;
-                if (status >= 400 && status < 500) return false;
+                const status = (error as Error & { status?: number }).status;
+                if (status && status >= 400 && status < 500) return false;
               }
               // 最大3回までリトライ
               return failureCount < 3;
@@ -36,8 +36,8 @@ export default function QueryProvider({ children }: QueryProviderProps) {
             retry: (failureCount, error) => {
               // 4xx エラーはリトライしない
               if (error instanceof Error && 'status' in error) {
-                const status = (error as any).status;
-                if (status >= 400 && status < 500) return false;
+                const status = (error as Error & { status?: number }).status;
+                if (status && status >= 400 && status < 500) return false;
               }
               // 最大1回までリトライ
               return failureCount < 1;
@@ -55,7 +55,6 @@ export default function QueryProvider({ children }: QueryProviderProps) {
       {process.env.NODE_ENV === 'development' && (
         <ReactQueryDevtools 
           initialIsOpen={false}
-          position="bottom-right"
         />
       )}
     </QueryClientProvider>

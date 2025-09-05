@@ -14,5 +14,5 @@ export { default as GenerateRecipeButton } from './components/GenerateRecipeButt
 // 型定義
 export type { IngredientInputSectionProps, IngredientItem } from './components/IngredientInputSection';
 export type { ImageUploadModalProps } from './components/ImageUploadModal';
-export type { TasteProfileSelectorProps, TasteProfile, TasteStyle, CookingDuration } from './components/TasteProfileSelector';
+export type { TasteProfileSelectorProps, TasteProfile, TasteStyle, TasteIntensity, CookingDuration } from './components/TasteProfileSelector';
 export type { GenerateRecipeButtonProps } from './components/GenerateRecipeButton';

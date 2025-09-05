@@ -57,27 +57,22 @@ export default function Header({
       sticky top-0 z-10 transition-all duration-300
       ${className}
     `}>
-      <div className="max-w-4xl mx-auto px-4 py-4">
+      <div className="max-w-4xl mx-auto px-4 py-2">
         <div className="flex items-center justify-between">
           
           {/* 左側: ブランドロゴとタイトル */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             
             {/* ブランドアイコン */}
-            <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl shadow-lg">
-              <ChefHat className="w-7 h-7 text-white" />
+            <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl shadow-md">
+              <ChefHat className="w-5 h-5 text-white" />
             </div>
             
-            {/* タイトル・サブタイトル */}
+            {/* タイトル */}
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">
+              <h1 className="text-lg font-bold bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">
                 {title}
               </h1>
-              {subtitle && (
-                <p className="text-sm text-gray-600">
-                  {subtitle}
-                </p>
-              )}
             </div>
             
           </div>

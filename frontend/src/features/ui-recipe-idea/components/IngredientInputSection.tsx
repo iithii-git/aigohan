@@ -40,8 +40,12 @@ export interface IngredientInputSectionProps {
   ingredients: IngredientItem[];
   /** 食材リスト変更時のコールバック */
   onIngredientsChange: (ingredients: IngredientItem[]) => void;
-  /** 画像アップロードボタンクリック時のコールバック */
+  /** 画像アップロードボタンクリック時のコールバック（従来） */
   onImageUploadClick: () => void;
+  /** ギャラリー起動 */
+  onOpenGallery?: () => void;
+  /** カメラ起動 */
+  onOpenCamera?: () => void;
   /** 最大食材数 */
   maxIngredients?: number;
   /** 無効化状態 */
@@ -64,6 +68,8 @@ export default function IngredientInputSection({
   ingredients,
   onIngredientsChange,
   onImageUploadClick,
+  onOpenGallery,
+  onOpenCamera,
   maxIngredients = 50,
   disabled = false,
   className,
@@ -199,16 +205,25 @@ export default function IngredientInputSection({
         </div>
       </div>
       
-      {/* ===== カメラボタン ===== */}
-      <div className="flex justify-center mb-6">
+      {/* ===== カメラ/ギャラリーボタン ===== */}
+      <div className="flex justify-center gap-3 mb-6">
         <Button
-          onClick={onImageUploadClick}
+          onClick={onOpenGallery ?? onImageUploadClick}
           disabled={disabled}
           variant="secondary"
+          leftIcon={<Sparkles className="w-5 h-5" />}
+          className="shadow-md"
+        >
+          ギャラリーから選ぶ
+        </Button>
+        <Button
+          onClick={onOpenCamera ?? onImageUploadClick}
+          disabled={disabled}
+          variant="primary"
           leftIcon={<Camera className="w-5 h-5" />}
           className="shadow-md"
         >
-          写真から食材を追加
+          カメラで撮影
         </Button>
       </div>
       

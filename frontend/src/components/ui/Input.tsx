@@ -30,7 +30,7 @@ export type InputSize = 'sm' | 'md' | 'lg';
 /**
  * Inputコンポーネントのプロパティ
  */
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /** 入力フィールドのサイズ */
   size?: InputSize;
   /** ラベルテキスト */
