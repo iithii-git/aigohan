@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, M_PLUS_Rounded_1c } from "next/font/google";
+import type { Metadata, Viewport } from 'next';
 import "./globals.css";
-import QueryProvider from "@/lib/providers/QueryProvider";
+import AppLayout from "@/components/layout/AppLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,12 +13,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const mPlusRounded = M_PLUS_Rounded_1c({
+  variable: "--font-mplus-rounded",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700", "800", "900"],
+});
+
 export const metadata: Metadata = {
   title: "AI Gohan - AI料理レシピ生成アプリ",
   description: "AI技術を活用して、手持ちの食材から美味しいレシピを自動生成するアプリです。画像から食材を認識し、最適な料理を提案します。",
   keywords: ["AI", "レシピ", "料理", "食材", "画像認識", "Gemini"],
   authors: [{ name: "AI Gohan Team" }],
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
   openGraph: {
     title: "AI Gohan - AI料理レシピ生成アプリ",
@@ -26,6 +31,11 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ja_JP",
   },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -36,11 +46,11 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${mPlusRounded.variable} antialiased`}
       >
-        <QueryProvider>
+        <AppLayout>
           {children}
-        </QueryProvider>
+        </AppLayout>
       </body>
     </html>
   );
