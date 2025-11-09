@@ -31,3 +31,9 @@ export {
   type ValidationResult,
   type IngredientValidationOptions,
 } from './utils/ingredientValidation';
+
+export {
+  separateIngredients,
+  detectSeasoningGroups,
+  parseRecipeIngredients,
+} from './utils/ingredientParser';

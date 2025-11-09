@@ -81,4 +81,19 @@ export interface RecipeWithMetadata extends Recipe {
   id?: string;
   createdAt?: string;
   isFavorite?: boolean;
+  parsedIngredients?: ParsedRecipeIngredients;
+}
+
+export interface SeasoningGroup {
+  label: string;
+  items: string[];
+  sourceIndexes: number[];
+  instructionHints?: string[];
+}
+
+export interface ParsedRecipeIngredients {
+  mainIngredients: string[];
+  seasonings: string[];
+  seasoningGroups: SeasoningGroup[];
+  ungroupedSeasonings: string[];
 }
