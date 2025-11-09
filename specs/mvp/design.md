@@ -25,9 +25,8 @@ graph TB
 - TanStack Query  (HTTP クライアント)
 
 **バックエンド:**
-- NestJS with TypeScript
-- Multer (ファイルアップロード)
-- Class Validator (入力検証)
+- Hono with TypeScript
+- Hono/Validator (Zod / Valibot) (入力検証)
 
 **API設計:**
 - TypeSpec (API ドキュメント・型生成)
