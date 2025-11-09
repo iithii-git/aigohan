@@ -1,0 +1,25 @@
+{
+  "id": "worktree-1",
+  "name": "バックエンド実装: Hono + OpenAI によるレシピ生成API",
+  "overallScore": 82,
+  "metrics": {
+    "codeQuality": 89,
+    "performance": 85,
+    "maintainability": 88,
+    "testCoverage": 35
+  },
+  "radarMetrics": {
+    "taskImplementation": 92,
+    "codeQuality": 89,
+    "implementationMethod": 88,
+    "stability": 83
+  },
+  "badge": "good",
+  "reviewPoints": {
+    "what": "OpenAPI仕様に基づき、/api/recipes/generate を含むHono+TypeScriptのバックエンドを実装。multipart/form-dataでingredients(JSON)とimages(ファイル)を受け取り、OpenAI(GPT-4o mini)でレシピを生成。Zodで入力/出力を検証し、統一レスポンス(success/data/error)を返却。ヘルスエンドポイントも追加。",
+    "why": "軽量で高速なHonoを採用し、MVP要件に即した実装速度と拡張性を両立。Zodで厳密な検証、AIプロバイダを抽象化して将来のモデル差し替えに対応。OpenAPI(TypeSpec生成)との整合を優先。",
+    "how": "Honoでルーティングを構成し、CORS/Logger/Request-IDをミドルウェアで付与。multipart/form-dataを解析し、画像はサイズ/形式/枚数を検証して最大3枚をbase64+MIMEでOpenAIに添付。chat.completionsでresponse_format=json_objectを利用し、Zodで検証後に軽微な品質向上(重複材料削除・手順整形)を実施。Nodeサーバーは@hono/node-serverで起動。",
+    "cost": "追加1060行 削除0行"
+  }
+}
+
